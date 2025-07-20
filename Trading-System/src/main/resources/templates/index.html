@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradePro - Advanced Trading Platform</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <span>TradePro</span>
+            </div>
+            <nav class="nav">
+                <a href="#dashboard" class="nav-link active">Dashboard</a>
+                <a href="#portfolio" class="nav-link">Portfolio</a>
+                <a href="#trades" class="nav-link">Trades</a>
+                <a href="#analytics" class="nav-link">Analytics</a>
+            </nav>
+            <div class="user-info">
+                <div class="balance">
+                    <span class="balance-label">Balance:</span>
+                    <span class="balance-amount" id="totalBalance">$125,430.50</span>
+                </div>
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Market Overview -->
+            <section class="market-overview">
+                <h2>Market Overview</h2>
+                <div class="market-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>NIFTY 50</h3>
+                            <p class="stat-value">19,745.25</p>
+                            <p class="stat-change positive">+245.30 (+1.26%)</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon red">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>SENSEX</h3>
+                            <p class="stat-value">66,598.91</p>
+                            <p class="stat-change negative">-123.45 (-0.18%)</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Volume</h3>
+                            <p class="stat-value">2.45B</p>
+                            <p class="stat-change positive">+15.2%</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Trading Interface -->
+            <section class="trading-interface">
+                <div class="trading-grid">
+                    <!-- Stock Search & Info -->
+                    <div class="trading-panel stock-info">
+                        <h3>Stock Information</h3>
+                        <div class="search-container">
+                            <input type="text" id="stockSearch" placeholder="Search stocks (e.g., RELIANCE, TCS, INFY)" class="search-input">
+                            <button class="search-btn"><i class="fas fa-search"></i></button>
+                        </div>
+                        <div class="stock-details" id="stockDetails">
+                            <div class="stock-item">
+                                <span class="stock-name">RELIANCE</span>
+                                <span class="stock-price">₹2,485.30</span>
+                                <span class="stock-change positive">+12.45 (+0.50%)</span>
+                            </div>
+                            <div class="stock-item">
+                                <span class="stock-name">TCS</span>
+                                <span class="stock-price">₹3,642.80</span>
+                                <span class="stock-change negative">-25.10 (-0.68%)</span>
+                            </div>
+                            <div class="stock-item">
+                                <span class="stock-name">INFY</span>
+                                <span class="stock-price">₹1,398.75</span>
+                                <span class="stock-change positive">+8.25 (+0.59%)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Buy/Sell Form -->
+                    <div class="trading-panel trade-form">
+                        <h3>Place Order</h3>
+                        <form id="tradingForm">
+                            <div class="form-group">
+                                <label for="customerName">Customer Name</label>
+                                <input type="text" id="customerName" name="customerName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="stockName">Stock Symbol</label>
+                                <input type="text" id="stockName" name="stockName" placeholder="e.g., RELIANCE" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="quantity">Quantity</label>
+                                    <input type="number" id="quantity" name="quantity" min="1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="price">Price (₹)</label>
+                                    <input type="number" id="price" name="price" min="0" step="0.01" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="stopLoss">Stop Loss (₹)</label>
+                                <input type="number" id="stopLoss" name="stopLoss" min="0" step="0.01" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="bankAccount">Bank Account</label>
+                                    <input type="number" id="bankAccount" name="bankAccount" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tradingAccount">Trading Account</label>
+                                    <input type="number" id="tradingAccount" name="tradingAccount" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="pan">PAN</label>
+                                    <input type="number" id="pan" name="pan" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="aadhar">Aadhar</label>
+                                    <input type="number" id="aadhar" name="aadhar" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="number" id="phone" name="phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="notes">Notes</label>
+                                <textarea id="notes" name="notes" maxlength="250" placeholder="Trading notes..."></textarea>
+                            </div>
+                            
+                            <!-- Address Fields -->
+                            <h4>Address Information</h4>
+                            <div class="form-group">
+                                <label for="houseNo">House No</label>
+                                <input type="text" id="houseNo" name="houseNo" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="street">Street</label>
+                                <input type="text" id="street" name="street" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="landmark">Landmark</label>
+                                <input type="text" id="landmark" name="landmark" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="city">City</label>
+                                    <input type="text" id="city" name="city" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="state">State</label>
+                                    <input type="text" id="state" name="state" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="pin">PIN Code</label>
+                                <input type="text" id="pin" name="pin" required>
+                            </div>
+
+                            <div class="trade-buttons">
+                                <button type="submit" class="btn btn-buy">
+                                    <i class="fas fa-arrow-up"></i>
+                                    Place Order
+                                </button>
+                                <button type="button" class="btn btn-reset" onclick="resetForm()">
+                                    <i class="fas fa-refresh"></i>
+                                    Reset
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Portfolio & Trades -->
+            <section class="portfolio-section">
+                <div class="portfolio-grid">
+                    <!-- Active Trades -->
+                    <div class="portfolio-panel">
+                        <h3>Active Trades</h3>
+                        <div class="trades-list" id="activeTradesList">
+                            <div class="trade-item">
+                                <div class="trade-info">
+                                    <span class="trade-stock">RELIANCE</span>
+                                    <span class="trade-quantity">100 shares</span>
+                                </div>
+                                <div class="trade-price">
+                                    <span class="current-price">₹2,485.30</span>
+                                    <span class="pnl positive">+₹1,250</span>
+                                </div>
+                            </div>
+                            <div class="trade-item">
+                                <div class="trade-info">
+                                    <span class="trade-stock">TCS</span>
+                                    <span class="trade-quantity">50 shares</span>
+                                </div>
+                                <div class="trade-price">
+                                    <span class="current-price">₹3,642.80</span>
+                                    <span class="pnl negative">-₹850</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- All Trades History -->
+                    <div class="portfolio-panel">
+                        <h3>All Trades</h3>
+                        <div class="trades-table-container">
+                            <table class="trades-table" id="tradesTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Customer</th>
+                                        <th>Stock</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tradesTableBody">
+                                    <!-- Trades will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Processing trade...</p>
+        </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div class="message-container" id="messageContainer"></div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html> 
