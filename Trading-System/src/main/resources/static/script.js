@@ -777,6 +777,368 @@ function showMessage(text, type = 'success') {
     }, 5000);
 }
 
+// AI Chat functionality
+let isAITyping = false;
+
+function askQuestion(question) {
+    document.getElementById('chatInput').value = question;
+    sendMessage();
+}
+
+function handleChatKeyPress(event) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+    }
+}
+
+async function sendMessage() {
+    const chatInput = document.getElementById('chatInput');
+    const message = chatInput.value.trim();
+    
+    if (!message || isAITyping) return;
+    
+    // Clear input
+    chatInput.value = '';
+    
+    // Add user message to chat
+    addMessageToChat(message, 'user');
+    
+    // Show AI typing indicator
+    showAITyping();
+    
+    try {
+        // Get AI response (using free local responses for now)
+        const response = await getAIResponse(message);
+        
+        // Remove typing indicator
+        hideAITyping();
+        
+        // Add AI response to chat
+        addMessageToChat(response, 'ai');
+        
+    } catch (error) {
+        console.error('AI API Error:', error);
+        hideAITyping();
+        addMessageToChat('I apologize, but I\'m having trouble connecting to my knowledge base right now. Please try again in a moment, or ask your question later.', 'ai');
+    }
+}
+
+function addMessageToChat(message, sender) {
+    const chatMessages = document.getElementById('chatMessages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = sender === 'user' ? 'user-message' : 'ai-message';
+    
+    const avatar = document.createElement('div');
+    avatar.className = 'message-avatar';
+    avatar.innerHTML = sender === 'user' ? '<i class="fas fa-user"></i>' : '<i class="fas fa-robot"></i>';
+    
+    const content = document.createElement('div');
+    content.className = 'message-content';
+    content.innerHTML = `<p>${message}</p>`;
+    
+    messageDiv.appendChild(avatar);
+    messageDiv.appendChild(content);
+    
+    chatMessages.appendChild(messageDiv);
+    
+    // Scroll to bottom
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function showAITyping() {
+    isAITyping = true;
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'ai-message loading-message';
+    typingDiv.id = 'typing-indicator';
+    
+    const avatar = document.createElement('div');
+    avatar.className = 'message-avatar';
+    avatar.innerHTML = '<i class="fas fa-robot"></i>';
+    
+    const content = document.createElement('div');
+    content.className = 'message-content';
+    content.innerHTML = '<p><i class="fas fa-spinner fa-spin"></i> AI is thinking...</p>';
+    
+    typingDiv.appendChild(avatar);
+    typingDiv.appendChild(content);
+    
+    document.getElementById('chatMessages').appendChild(typingDiv);
+    document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+}
+
+function hideAITyping() {
+    isAITyping = false;
+    const typingIndicator = document.getElementById('typing-indicator');
+    if (typingIndicator) {
+        typingIndicator.remove();
+    }
+}
+
+async function getAIResponse(question) {
+    // For now, using local responses. You can integrate with free APIs like:
+    // - Hugging Face Inference API (free tier)
+    // - OpenAI API (with free credits)
+    // - Google's Gemini API (free tier)
+    // - Cohere API (free tier)
+    
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
+    
+    return getLocalResponse(question);
+}
+
+function getLocalResponse(question) {
+    const lowerQuestion = question.toLowerCase();
+    
+    // Trading-specific responses
+    if (lowerQuestion.includes('buy') && lowerQuestion.includes('stock')) {
+        return `Great question about buying stocks! Here are key factors to consider:
+
+📊 **Research First**: Analyze company fundamentals (P/E ratio, revenue growth, debt levels)
+📈 **Technical Analysis**: Look at price trends, support/resistance levels, and volume
+💰 **Valuation**: Ensure the stock isn't overpriced compared to its intrinsic value
+🎯 **Timing**: Consider market conditions and your investment timeline
+⚖️ **Risk Management**: Never invest more than you can afford to lose
+
+**Popular strategies:**
+- Dollar-cost averaging for long-term investing
+- Buy during market dips if fundamentals are strong
+- Set stop-loss orders to limit downside risk
+
+💡 Remember: This is educational information. Always do your own research and consider consulting a financial advisor.`;
+    }
+    
+    if (lowerQuestion.includes('fundamental') && lowerQuestion.includes('analysis')) {
+        return `Fundamental analysis is crucial for stock evaluation! Here's what to examine:
+
+📊 **Financial Metrics:**
+- P/E Ratio (Price-to-Earnings): Compare with industry average
+- P/B Ratio (Price-to-Book): Asset valuation indicator
+- ROE (Return on Equity): Management efficiency measure
+- Debt-to-Equity: Financial stability indicator
+
+📈 **Growth Indicators:**
+- Revenue growth (quarterly/yearly)
+- Earnings per share (EPS) growth
+- Profit margins and their trends
+
+🏢 **Qualitative Factors:**
+- Management quality and track record
+- Competitive advantages (moats)
+- Industry position and market share
+- Future growth prospects
+
+🔍 **Key Questions:**
+- Is the business model sustainable?
+- Does the company have pricing power?
+- Are there regulatory or competitive threats?
+
+Start with annual reports and financial statements for accurate data!`;
+    }
+    
+    if (lowerQuestion.includes('risk') && lowerQuestion.includes('management')) {
+        return `Risk management is the foundation of successful trading! Here are essential strategies:
+
+🛡️ **Position Sizing:**
+- Never risk more than 1-2% of your portfolio on a single trade
+- Use the "1% rule" for stop-loss placement
+- Diversify across different stocks and sectors
+
+📉 **Stop-Loss Orders:**
+- Set stop-losses at 5-10% below entry price for stocks
+- Use trailing stops to lock in profits as prices rise
+- Don't move stop-losses against your position
+
+🎯 **Portfolio Diversification:**
+- Spread investments across 15-20 different stocks minimum
+- Include different sectors (tech, healthcare, finance, etc.)
+- Consider geographic diversification
+
+⚖️ **Risk-Reward Ratio:**
+- Target at least 2:1 reward-to-risk ratio
+- If risking ₹100, aim to make ₹200+
+- Don't chase trades with poor risk-reward
+
+💡 **Emotional Control:**
+- Stick to your trading plan
+- Don't let emotions drive decisions
+- Accept that losses are part of trading
+
+Remember: Preservation of capital is more important than making profits!`;
+    }
+    
+    if (lowerQuestion.includes('chart') || lowerQuestion.includes('technical')) {
+        return `Reading stock charts is a valuable skill! Here's your guide:
+
+📊 **Chart Types:**
+- **Candlestick Charts**: Show open, high, low, close prices
+- **Line Charts**: Simple price trend visualization
+- **Bar Charts**: Similar to candlesticks but different format
+
+📈 **Key Elements:**
+- **Trend Lines**: Connect highs or lows to show direction
+- **Support**: Price level where stock tends to bounce up
+- **Resistance**: Price level where stock faces selling pressure
+- **Volume**: Confirms price movements (high volume = strong move)
+
+🔍 **Popular Indicators:**
+- **Moving Averages**: 20-day, 50-day, 200-day (trend indicators)
+- **RSI**: Relative Strength Index (overbought/oversold)
+- **MACD**: Moving Average Convergence Divergence (momentum)
+- **Bollinger Bands**: Volatility and price range indicator
+
+📋 **Chart Patterns:**
+- **Head & Shoulders**: Reversal pattern
+- **Double Top/Bottom**: Reversal signals
+- **Triangles**: Continuation patterns
+- **Flags & Pennants**: Short-term continuation
+
+Start with simple trend analysis and gradually add indicators!`;
+    }
+    
+    if (lowerQuestion.includes('order') && lowerQuestion.includes('type')) {
+        return `Understanding order types is crucial for effective trading! Here are the main types:
+
+📋 **Market Orders:**
+- **Execution**: Immediate at current market price
+- **Pros**: Guaranteed execution
+- **Cons**: Price uncertainty in volatile markets
+- **Best for**: Liquid stocks when speed matters
+
+💰 **Limit Orders:**
+- **Execution**: Only at specified price or better
+- **Pros**: Price control, no slippage
+- **Cons**: May not execute if price doesn't reach limit
+- **Best for**: Entering positions at specific prices
+
+🛑 **Stop-Loss Orders:**
+- **Trigger**: Becomes market order when stop price hit
+- **Purpose**: Limit losses on existing positions
+- **Example**: Buy at ₹100, set stop-loss at ₹95
+
+🎯 **Stop-Limit Orders:**
+- **Combination**: Stop order + Limit order
+- **Execution**: Becomes limit order when stop price triggered
+- **Advantage**: Price protection even after trigger
+
+⏰ **Time-Based Orders:**
+- **Day Orders**: Valid only for current trading session
+- **GTC (Good Till Cancelled)**: Valid until you cancel
+- **IOC (Immediate or Cancel)**: Execute immediately or cancel
+
+Choose order type based on your strategy and market conditions!`;
+    }
+    
+    if (lowerQuestion.includes('diversif')) {
+        return `Portfolio diversification is your safety net! Here's how to build a well-diversified portfolio:
+
+🎯 **Sector Diversification:**
+- **Technology**: Growth potential but volatile
+- **Healthcare**: Defensive, steady growth
+- **Finance**: Cyclical, interest rate sensitive
+- **Consumer Goods**: Stable demand
+- **Energy**: Commodity-driven, cyclical
+
+📊 **Size Diversification:**
+- **Large Cap**: Stable, established companies (60-70%)
+- **Mid Cap**: Growth potential with moderate risk (20-25%)
+- **Small Cap**: High growth, high risk (5-15%)
+
+🌍 **Geographic Diversification:**
+- Domestic stocks (70-80%)
+- International exposure (20-30%)
+- Emerging markets (small allocation)
+
+💼 **Asset Class Diversification:**
+- **Equities**: 60-80% for growth
+- **Bonds**: 10-30% for stability
+- **REITs**: 5-10% for real estate exposure
+- **Commodities**: 2-5% for inflation hedge
+
+⚖️ **Correlation Awareness:**
+- Avoid stocks that move together
+- Mix growth and value stocks
+- Include defensive and cyclical sectors
+
+📈 **Rebalancing:**
+- Review portfolio quarterly
+- Rebalance when allocation drifts >5%
+- Take profits from winners, add to underperformers
+
+Remember: Don't over-diversify - 15-25 stocks are usually sufficient!`;
+    }
+    
+    // Default responses for common trading terms
+    if (lowerQuestion.includes('bull market') || lowerQuestion.includes('bear market')) {
+        return `Understanding market cycles is essential for traders:
+
+🐂 **Bull Market:**
+- Rising prices over extended period (20%+ gain)
+- High investor confidence and optimism
+- Strong economic indicators
+- Strategy: Buy and hold, momentum trading
+
+🐻 **Bear Market:**
+- Declining prices over extended period (20%+ decline)
+- Pessimism and fear in markets
+- Economic uncertainty or recession
+- Strategy: Defensive stocks, short selling, cash positions
+
+📊 **Market Indicators:**
+- Economic data (GDP, employment, inflation)
+- Corporate earnings trends
+- Investor sentiment surveys
+- Technical indicators and volume
+
+💡 **Trading Tips:**
+- Bull markets: Ride the trend, don't fight it
+- Bear markets: Preserve capital, wait for opportunities
+- Both phases are temporary and cyclical
+
+Remember: The market can remain irrational longer than you can remain solvent!`;
+    }
+    
+    // General trading advice
+    return `That's an excellent question about ${question}! 
+
+Here are some key trading principles to keep in mind:
+
+📚 **Education First:**
+- Continuously learn about markets and trading strategies
+- Read financial news and company reports regularly
+- Understand the businesses you're investing in
+
+💰 **Financial Discipline:**
+- Only invest money you can afford to lose
+- Maintain an emergency fund separate from investments
+- Don't use borrowed money for trading
+
+📊 **Research & Analysis:**
+- Combine fundamental and technical analysis
+- Understand the company's business model and financials
+- Monitor market trends and economic indicators
+
+⚖️ **Risk Management:**
+- Diversify your portfolio across sectors and asset classes
+- Use stop-loss orders to limit potential losses
+- Position sizing: never risk more than 1-2% per trade
+
+🎯 **Strategy & Patience:**
+- Develop a clear trading/investment strategy
+- Stick to your plan and avoid emotional decisions
+- Be patient - good opportunities take time
+
+📈 **Continuous Monitoring:**
+- Review your portfolio regularly
+- Stay updated with company and market news
+- Adjust strategy based on changing market conditions
+
+💡 **Remember**: This is educational information only. Always conduct your own research and consider consulting with a qualified financial advisor for personalized investment advice.
+
+Feel free to ask more specific questions about any aspect of trading or investing!`;
+}
+
 // Global function exports for HTML onclick handlers
 window.showSection = showSection;
 window.toggleMobileMenu = toggleMobileMenu;
@@ -787,4 +1149,7 @@ window.editTrade = editTrade;
 window.deleteTrade = deleteTrade;
 window.resetForm = resetForm;
 window.filterTrades = filterTrades;
-window.exportTrades = exportTrades; 
+window.exportTrades = exportTrades;
+window.askQuestion = askQuestion;
+window.handleChatKeyPress = handleChatKeyPress;
+window.sendMessage = sendMessage; 

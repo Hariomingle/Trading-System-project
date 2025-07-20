@@ -21,6 +21,7 @@
                 <a href="#portfolio" class="nav-link" onclick="showSection('portfolio')">Portfolio</a>
                 <a href="#trades" class="nav-link" onclick="showSection('trades')">Trades</a>
                 <a href="#analytics" class="nav-link" onclick="showSection('analytics')">Analytics</a>
+                <a href="#ai-chat" class="nav-link" onclick="showSection('ai-chat')">AI Assistant</a>
             </nav>
             <div class="user-info">
                 <div class="balance">
@@ -48,6 +49,9 @@
             </a>
             <a href="#analytics" class="mobile-nav-link" onclick="showSection('analytics')">
                 <i class="fas fa-chart-bar"></i> Analytics
+            </a>
+            <a href="#ai-chat" class="mobile-nav-link" onclick="showSection('ai-chat')">
+                <i class="fas fa-robot"></i> AI Assistant
             </a>
         </div>
     </header>
@@ -310,6 +314,68 @@
                         <div class="top-stocks" id="topStocks">
                             <!-- Top performing stocks will be populated -->
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AI Chat Section -->
+            <section id="ai-chat-section" class="content-section">
+                <div class="ai-chat-container">
+                    <div class="ai-chat-header">
+                        <h2><i class="fas fa-robot"></i> AI Trading Assistant</h2>
+                        <p>Get instant answers to your trading questions from our AI assistant</p>
+                    </div>
+
+                    <div class="chat-interface">
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="ai-message">
+                                <div class="message-avatar">
+                                    <i class="fas fa-robot"></i>
+                                </div>
+                                <div class="message-content">
+                                    <p>Hello! I'm your AI trading assistant. Ask me anything about trading, stocks, market analysis, or investment strategies. How can I help you today?</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="quick-questions">
+                            <h4>Quick Questions:</h4>
+                            <div class="question-buttons">
+                                <button class="question-btn" onclick="askQuestion('What is the best time to buy stocks?')">
+                                    📈 Best time to buy stocks?
+                                </button>
+                                <button class="question-btn" onclick="askQuestion('How to analyze stock fundamentals?')">
+                                    🔍 How to analyze fundamentals?
+                                </button>
+                                <button class="question-btn" onclick="askQuestion('What is risk management in trading?')">
+                                    🛡️ Risk management tips?
+                                </button>
+                                <button class="question-btn" onclick="askQuestion('How to read stock charts?')">
+                                    📊 How to read charts?
+                                </button>
+                                <button class="question-btn" onclick="askQuestion('What are different order types?')">
+                                    📋 Order types explained?
+                                </button>
+                                <button class="question-btn" onclick="askQuestion('How to diversify portfolio?')">
+                                    🎯 Portfolio diversification?
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="chat-input-container">
+                            <div class="chat-input-wrapper">
+                                <input type="text" id="chatInput" placeholder="Ask me anything about trading..." 
+                                       onkeypress="handleChatKeyPress(event)">
+                                <button id="sendButton" onclick="sendMessage()">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ai-disclaimer">
+                        <p><i class="fas fa-info-circle"></i> 
+                        This AI assistant provides educational information only. Always do your own research and consider consulting with a financial advisor for investment decisions.</p>
                     </div>
                 </div>
             </section>
