@@ -328,6 +328,19 @@ async function handleTradeSubmission(e) {
     e.preventDefault();
     
     const formData = new FormData(e.target);
+    
+    // Validate required fields
+    const requiredFields = ['customerName', 'stockName', 'quantity', 'price', 'stopLoss', 
+                           'bankAccount', 'tradingAccount', 'pan', 'aadhar', 'phone',
+                           'houseNo', 'street', 'landmark', 'city', 'state', 'pin'];
+    
+    for (let field of requiredFields) {
+        if (!formData.get(field) || formData.get(field).trim() === '') {
+            showMessage(`Please fill in the ${field} field`, 'error');
+            return;
+        }
+    }
+    
     const tradeData = {
         customer_name: formData.get('customerName'),
         stock_name: formData.get('stockName').toUpperCase(),
@@ -353,14 +366,19 @@ async function handleTradeSubmission(e) {
     try {
         showLoading(true);
         
+        // Debug: Log the data being sent
+        console.log('Sending trade data:', tradeData);
+        
         let response;
         if (currentEditingTrade) {
+            console.log('Updating trade with ID:', currentEditingTrade);
             response = await fetch(`${API_BASE_URL}/update/${currentEditingTrade}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(tradeData)
             });
         } else {
+            console.log('Creating new trade');
             response = await fetch(`${API_BASE_URL}/addtradings`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -379,7 +397,9 @@ async function handleTradeSubmission(e) {
             updateQuickStats();
             currentEditingTrade = null;
         } else {
-            throw new Error('Failed to process trade');
+            const errorText = await response.text();
+            console.error('Server response:', errorText);
+            throw new Error(`Failed to process trade: ${errorText}`);
         }
     } catch (error) {
         console.error('Error:', error);
