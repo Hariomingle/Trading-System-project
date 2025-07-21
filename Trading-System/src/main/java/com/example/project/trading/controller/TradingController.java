@@ -3,6 +3,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +22,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/trading")
+@CrossOrigin(origins = "*") // Enable CORS for frontend access
 public class TradingController {
 	
 	@Autowired
@@ -34,8 +37,13 @@ public class TradingController {
 	
 	@PostMapping("/addtradings")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Trading addTrading(@Valid @RequestBody Trading t) {
-		return tradingService.addTrading(t);
+	public ResponseEntity<?> addTrading(@Valid @RequestBody Trading t) {
+		try {
+			Trading result = tradingService.addTrading(t);
+			return ResponseEntity.ok(result);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+		}
 	}
 	
 	@PutMapping("/update/{tid}")
@@ -56,4 +64,9 @@ public class TradingController {
 		return tradingService.getAllTradings();
 	}
 	
+	@GetMapping("/{tid}")
+	@ResponseStatus(HttpStatus.OK)
+	public Trading getTradingById(@PathVariable int tid) {
+		return tradingService.displayTrading(tid);
+	}
 }
