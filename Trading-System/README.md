@@ -30,7 +30,21 @@ A modern, full-stack trading platform built with **Spring Boot** and **vanilla J
 - **Sample data included** - Pre-loaded with demo trades
 - **Real-time simulation** - Watch prices change live
 
-## 🚀 **Quick Start (Local Development)**
+## 🚀 **Quick Deployment (FREE Forever)**
+
+### **🎯 Deploy on Replit (Recommended)**
+**Get your app live in 5 minutes for FREE!**
+
+👉 **[📖 Complete Deployment Guide](DEPLOYMENT-GUIDE.md)** 👈
+
+**Quick Steps:**
+1. Go to [replit.com](https://replit.com)
+2. Sign in with GitHub
+3. Import: `https://github.com/Hariomingle/Trading-System-project`
+4. Click **"Run"** 
+5. **Done!** Your app is live worldwide 🌍
+
+## 🏠 **Local Development**
 
 ### Prerequisites
 - **Java 17+** 
