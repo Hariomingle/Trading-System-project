@@ -1,11 +1,22 @@
 {
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
-    "builder": "NIXPACKS"
+    "builder": "nixpacks",
+    "buildCommand": "./mvnw clean install -DskipTests"
   },
   "deploy": {
-    "startCommand": "java -jar target/trading-0.0.1-SNAPSHOT.jar",
-    "restartPolicyType": "ON_FAILURE",
-    "restartPolicyMaxRetries": 10
+    "startCommand": "java -Dserver.port=$PORT -jar target/trading-*.jar",
+    "healthcheckPath": "/",
+    "healthcheckTimeout": 300,
+    "restartPolicyType": "on_failure",
+    "restartPolicyMaxRetries": 3
+  },
+  "environments": {
+    "production": {
+      "variables": {
+        "SPRING_PROFILES_ACTIVE": "prod",
+        "JAVA_OPTS": "-Xmx512m -Xms256m"
+      }
+    }
   }
 } 

@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: tradepro-trading-system
+    env: java
+    buildCommand: "./mvnw clean install -DskipTests"
+    startCommand: "java -Dserver.port=$PORT -jar target/trading-*.jar"
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: JAVA_OPTS
+        value: "-Xmx512m -Xms256m"
+    healthCheckPath: "/"
+    plan: free 
